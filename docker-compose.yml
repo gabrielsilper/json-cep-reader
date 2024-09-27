@@ -1,0 +1,10 @@
+services:
+  mysql-db:
+    container_name: ceps-db
+    image: mysql:8.0.39
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ceps-db
+    ports:
+      - "3306:3306"

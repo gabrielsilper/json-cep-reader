@@ -15,7 +15,7 @@ public class CEPJsonReader {
         this.gson = new Gson();
     }
 
-    public CEP readCEPJson(String path) {
+    public CEP read(String path) {
         try (Reader reader = new FileReader(path)) {
             return gson.fromJson(reader, CEP.class);
         } catch (IOException e) {
@@ -23,7 +23,7 @@ public class CEPJsonReader {
         }
     }
 
-    public CEP readCEPJson(File json) {
+    public CEP read(File json) {
         try (Reader reader = new FileReader(json)) {
             return gson.fromJson(reader, CEP.class);
         } catch (IOException e) {

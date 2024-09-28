@@ -8,10 +8,16 @@ import com.github.gabrielsilper.services.CEPJsonReader;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
-public class Main {
-    public static void main(String[] args) throws SQLException {
+public class MainWithConcurrencesThread {
+    public static void main(String[] args) throws SQLException, ExecutionException, InterruptedException {
         long startTime = System.nanoTime();
 
         CEPJsonReader cepJsonReader = new CEPJsonReader();
@@ -20,13 +26,21 @@ public class Main {
         File dir = new File("json-ceps");
         File[] jsons = dir.listFiles();
 
+        ExecutorService executor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+        List<Future<CEP>> futures = new ArrayList<>();
+
         if (Objects.nonNull(jsons)) {
             for (File json : jsons) {
-                CEP cep = cepJsonReader.read(json);
+                futures.add(executor.submit(() -> cepJsonReader.read(json)));
+            }
+            for (Future<CEP> future : futures) {
+                CEP cep = future.get();
                 cepDao.addCEP(con, cep);
             }
             System.out.println("CEPs adicionados");
         }
+
+        executor.shutdown();
         con.close();
 
         long endTime = System.nanoTime();

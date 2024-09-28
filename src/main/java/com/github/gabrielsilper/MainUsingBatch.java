@@ -8,9 +8,11 @@ import com.github.gabrielsilper.services.CEPJsonReader;
 import java.io.File;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
-public class Main {
+public class MainUsingBatch {
     public static void main(String[] args) throws SQLException {
         long startTime = System.nanoTime();
 
@@ -21,10 +23,12 @@ public class Main {
         File[] jsons = dir.listFiles();
 
         if (Objects.nonNull(jsons)) {
+            List<CEP> cepsToInsert = new ArrayList<>();
             for (File json : jsons) {
                 CEP cep = cepJsonReader.read(json);
-                cepDao.addCEP(con, cep);
+                cepsToInsert.add(cep);
             }
+            cepDao.addCEPsBatch(con, cepsToInsert);
             System.out.println("CEPs adicionados");
         }
         con.close();

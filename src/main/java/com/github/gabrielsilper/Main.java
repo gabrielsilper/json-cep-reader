@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.util.Objects;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args) throws SQLException, InterruptedException {
         long startTime = System.nanoTime();
 
         CEPJsonReader cepJsonReader = new CEPJsonReader();
@@ -21,8 +21,20 @@ public class Main {
         File[] jsons = dir.listFiles();
 
         if (Objects.nonNull(jsons)) {
-            for (File json : jsons) {
-                CEP cep = cepJsonReader.read(json);
+            // Testes para melhorar o desempenho, com esse sleep para dar folga as operações dd banco, foi 3x mais rápido.
+            System.out.println(jsons.length);
+            for (int i = 0; i < 10000; i++) {
+                CEP cep = cepJsonReader.read(jsons[i]);
+                cepDao.addCEP(con, cep);
+            }
+            Thread.sleep(2000);
+            for (int i = 10000; i < 20000; i++) {
+                CEP cep = cepJsonReader.read(jsons[i]);
+                cepDao.addCEP(con, cep);
+            }
+            Thread.sleep(2000);
+            for (int i = 20000; i < 30000; i++) {
+                CEP cep = cepJsonReader.read(jsons[i]);
                 cepDao.addCEP(con, cep);
             }
             System.out.println("CEPs adicionados");

@@ -15,8 +15,8 @@ import java.util.zip.ZipInputStream;
 public class AcessaDiretoArquivoZip {
     public static void main(String[] args) {
         // Arquivo que baixei do OpenCEP -> https://github.com/SeuAliado/OpenCEP/releases/
-        String zipFilePath = "v1.zip";
-        String folder = "v1/";
+        String zipFilePath = "json-ceps.zip";
+        String folder = "json-ceps/";
         Gson gson = new Gson();
         CEPDao cepDao = new CEPDao();
 
@@ -26,19 +26,14 @@ public class AcessaDiretoArquivoZip {
                  ZipInputStream zis = new ZipInputStream(new BufferedInputStream(fis))) {
 
                 ZipEntry entry;
-                int insertionsLimit = 0;
-                while ((entry = zis.getNextEntry()) != null && insertionsLimit < 100) {
+                int insertions = 0;
+                while ((entry = zis.getNextEntry()) != null && insertions < 100) {
                     if (entry.getName().startsWith(folder) && entry.getName().endsWith(".json")) {
-                        StringBuilder jsonContent = new StringBuilder();
                         BufferedReader reader = new BufferedReader(new InputStreamReader(zis, StandardCharsets.UTF_8));
-                        String line;
-                        while ((line = reader.readLine()) != null) {
-                            jsonContent.append(line);
-                        }
 
-                        CEP cep = gson.fromJson(jsonContent.toString(), CEP.class);
+                        CEP cep = gson.fromJson(reader, CEP.class);
                         cepDao.addCEP(connection, cep);
-                        insertionsLimit++;
+                        insertions++;
                     }
                 }
                 connection.commit();

@@ -3,7 +3,7 @@ package com.github.gabrielsilper;
 import com.github.gabrielsilper.daos.CEPDao;
 import com.github.gabrielsilper.db.DatabaseConnection;
 import com.github.gabrielsilper.models.CEP;
-import com.github.gabrielsilper.services.CEPJsonReader;
+import com.github.gabrielsilper.utils.JsonCepReader;
 
 import java.io.File;
 import java.sql.Connection;
@@ -16,7 +16,7 @@ public class MainUsingBatch {
     public static void main(String[] args) throws SQLException {
         long startTime = System.nanoTime();
 
-        CEPJsonReader cepJsonReader = new CEPJsonReader();
+        JsonCepReader cepJsonReader = new JsonCepReader();
         Connection con = DatabaseConnection.getConnection();
         CEPDao cepDao = new CEPDao();
         File dir = new File("json-ceps");

@@ -1,4 +1,4 @@
-package com.github.gabrielsilper.services;
+package com.github.gabrielsilper.utils;
 
 import com.github.gabrielsilper.models.CEP;
 import com.google.gson.Gson;
@@ -8,10 +8,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
 
-public class CEPJsonReader {
+public class JsonCepReader {
     private final Gson gson;
 
-    public CEPJsonReader() {
+    public JsonCepReader() {
         this.gson = new Gson();
     }
 

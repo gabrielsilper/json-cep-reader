@@ -6,7 +6,6 @@ public class CEP {
     private String cep;
     private String logradouro;
     private String complemento;
-    private String unidade;
     private String bairro;
     private String localidade;
     private String uf;
@@ -22,10 +21,6 @@ public class CEP {
 
     public String getComplemento() {
         return complemento;
-    }
-
-    public String getUnidade() {
-        return unidade;
     }
 
     public String getBairro() {
@@ -63,7 +58,6 @@ public class CEP {
                 "cep='" + cep + '\'' +
                 ", logradouro='" + logradouro + '\'' +
                 ", complemento='" + complemento + '\'' +
-                ", unidade='" + unidade + '\'' +
                 ", bairro='" + bairro + '\'' +
                 ", localidade='" + localidade + '\'' +
                 ", uf='" + uf + '\'' +
